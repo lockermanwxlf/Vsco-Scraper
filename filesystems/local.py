@@ -22,10 +22,14 @@ class LocalFilesystem:
         os.makedirs(os.path.join(OUTPUT_FOLDER, directory_name), exist_ok=True)
         return os.path.join(OUTPUT_FOLDER, directory_name, filename)
 
+    def should_save(self, directory_name: str, post: VscoMedia):
+        filepath = self.get_filepath(self, directory_name, post)
+        return not os.path.exists(filepath)
+
     def process_post(self, directory_name: str, post: VscoMedia):
         global fake_ua
         filepath = self.get_filepath(directory_name, post)
-        if os.path.exists(filepath): 
+        if not self.should_save(directory_name, post): 
             return None
         match post.type:
             case VscoMediaType.IMAGE:
