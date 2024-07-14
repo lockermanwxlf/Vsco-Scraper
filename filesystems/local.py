@@ -26,7 +26,7 @@ class LocalFilesystem:
         global fake_ua
         filepath = self.get_filepath(directory_name, post)
         if os.path.exists(filepath): 
-            return False
+            return None
         match post.type:
             case VscoMediaType.IMAGE:
                 print('Downloading png', directory_name, post.timestamp)
@@ -50,7 +50,7 @@ class LocalFilesystem:
                     file.write(response.content)
             case VscoMediaType.VIDEO_M3U8:
                 if not os.path.exists('ffmpeg.exe'):
-                    return False
+                    return None
                 print('Downloading m3u8', directory_name, post.timestamp)
                 subprocess.run([r'ffmpeg.exe', 
                             '-protocol_whitelist', 'file,http,https,tcp,tls,crypto', 
@@ -58,4 +58,4 @@ class LocalFilesystem:
                             '-c', 'copy',
                             '-bsf:a', 'aac_adtstoasc',
                             filepath])
-        return True
+        return filepath
