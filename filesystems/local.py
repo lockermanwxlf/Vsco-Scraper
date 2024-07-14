@@ -12,7 +12,7 @@ class LocalFilesystem:
     
     def __init__(self) -> None:
         if not os.path.exists('ffmpeg.exe'):
-            print('FFmpeg.exe not detected. This should be in the same directory as main.py.')
+            print('ffmpeg.exe not detected. This should be in the same directory as main.py.')
             print('Posts stored as .m3u8 playlists will not be downloaded until this is present.')
     
     def get_filepath(self, directory_name: str, post: VscoMedia):
