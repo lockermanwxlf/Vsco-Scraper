@@ -2,6 +2,7 @@ import os
 import requests
 from vsco_api import VscoMedia, VscoMediaType
 import fake_useragent
+import subprocess
 
 OUTPUT_FOLDER = 'output'
 
@@ -41,4 +42,12 @@ class LocalFilesystem:
                 response.raise_for_status()
                 with open(filepath, 'wb+') as file:
                     file.write(response.content)
+            case VscoMediaType.VIDEO_M3U8:
+                print("DOWNLOADING PLAYLIST WITH FFMPEG")
+                subprocess.run([r'ffmpeg.exe', 
+                            '-protocol_whitelist', 'file,http,https,tcp,tls,crypto', 
+                            '-i', post.download_url,
+                            '-c', 'copy',
+                            '-bsf:a', 'aac_adtstoasc',
+                            filepath])
         return True
