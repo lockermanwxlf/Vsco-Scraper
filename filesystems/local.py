@@ -10,6 +10,11 @@ fake_ua = fake_useragent.FakeUserAgent()
 
 class LocalFilesystem:
     
+    def __init__(self) -> None:
+        if not os.path.exists('ffmpeg.exe'):
+            print('FFmpeg.exe not detected. This should be in the same directory as main.py.')
+            print('Posts stored as .m3u8 playlists will not be downloaded until this is present.')
+    
     def get_filepath(self, directory_name: str, post: VscoMedia):
         global OUTPUT_FOLDER
         extension = '.png' if post.type == VscoMediaType.IMAGE else '.mp4'
@@ -43,6 +48,8 @@ class LocalFilesystem:
                 with open(filepath, 'wb+') as file:
                     file.write(response.content)
             case VscoMediaType.VIDEO_M3U8:
+                if not os.path.exists('ffmpeg.exe'):
+                    return False
                 print("DOWNLOADING PLAYLIST WITH FFMPEG")
                 subprocess.run([r'ffmpeg.exe', 
                             '-protocol_whitelist', 'file,http,https,tcp,tls,crypto', 
