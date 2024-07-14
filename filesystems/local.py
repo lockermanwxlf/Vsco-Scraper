@@ -27,9 +27,9 @@ class LocalFilesystem:
         filepath = self.get_filepath(directory_name, post)
         if os.path.exists(filepath): 
             return False
-        print('Downloading', directory_name, post.timestamp)
         match post.type:
             case VscoMediaType.IMAGE:
+                print('Downloading png', directory_name, post.timestamp)
                 response = requests.get(
                     url=post.download_url,
                     headers={
@@ -39,6 +39,7 @@ class LocalFilesystem:
                 with open(filepath, 'wb+') as file:
                     file.write(response.content)
             case VscoMediaType.VIDEO_MP4:
+                print('Downloading mp4', directory_name, post.timestamp)
                 response = requests.get(
                     url=post.download_url,
                     headers={
@@ -50,7 +51,7 @@ class LocalFilesystem:
             case VscoMediaType.VIDEO_M3U8:
                 if not os.path.exists('ffmpeg.exe'):
                     return False
-                print("DOWNLOADING PLAYLIST WITH FFMPEG")
+                print('Downloading m3u8', directory_name, post.timestamp)
                 subprocess.run([r'ffmpeg.exe', 
                             '-protocol_whitelist', 'file,http,https,tcp,tls,crypto', 
                             '-i', post.download_url,
