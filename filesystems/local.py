@@ -23,7 +23,7 @@ class LocalFilesystem:
         return os.path.join(OUTPUT_FOLDER, directory_name, filename)
 
     def should_save(self, directory_name: str, post: VscoMedia):
-        filepath = self.get_filepath(self, directory_name, post)
+        filepath = self.get_filepath(directory_name, post)
         return not os.path.exists(filepath)
 
     def process_post(self, directory_name: str, post: VscoMedia):
